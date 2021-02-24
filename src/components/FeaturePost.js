@@ -29,7 +29,7 @@ export default function FeaturedPost(props) {
 
   return (
     <Grid item xs={12} md={6}>
-      <Link to={`details/${post.id}`}>
+      <Link style={{ textDecoration: "none" }} to={`details/${post.id}`}>
         <CardActionArea>
           <Card className={classes.card}>
             <Hidden xsDown>
@@ -45,8 +45,8 @@ export default function FeaturedPost(props) {
                   {post.title}
                 </Typography>
 
-                <Typography variant="subtitle1" paragraph>
-                  {post.description}
+                <Typography variant="subtitle2" paragraph>
+                  {post.description.substring(0, 120) + "..."}
                 </Typography>
                 <Typography variant="subtitle1">Continue reading...</Typography>
               </CardContent>

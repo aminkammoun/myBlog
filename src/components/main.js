@@ -18,7 +18,7 @@ export default function Main() {
         const data = doc.data();
         const item = {
           ...data,
-          // date: new Date(data.date.seconds * 1000), //format data as it comes in from firebase
+          date: new Date(data.date.seconds * 1000), //format data as it comes in from firebase
           id: doc.id,
         };
         items.push(item);
@@ -27,6 +27,7 @@ export default function Main() {
       setPost(items.slice(-1)[0]);
     });
   }, []);
+  
   return (
     <div>
       <MainFeaturedPost post={post} />
