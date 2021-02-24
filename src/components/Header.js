@@ -6,6 +6,7 @@ import Button from "@material-ui/core/Button";
 import IconButton from "@material-ui/core/IconButton";
 import SearchIcon from "@material-ui/icons/Search";
 import Typography from "@material-ui/core/Typography";
+import firebase from "../db/firebase";
 
 const useStyles = makeStyles((theme) => ({
   toolbar: {
@@ -35,7 +36,40 @@ const useStyles = makeStyles((theme) => ({
 export default function Header(props) {
   const classes = useStyles();
   const { title } = props;
+  const [userData, setUserData] = React.useState([]);
 
+  const signIn = () => {
+    var provider = new firebase.auth.GoogleAuthProvider();
+    firebase
+      .auth()
+      .signInWithPopup(provider)
+      .then((result) => {
+        /** @type {firebase.auth.OAuthCredential} */
+        var credential = result.credential;
+
+        // This gives you a Google Access Token. You can use it to access the Google API.
+        var token = credential.accessToken;
+        // The signed-in user info.
+        var user = result.user;
+
+        setUserData(user);
+        console.log(userData);
+      })
+      .catch((error) => {
+        // Handle Errors here.
+        var errorCode = error.code;
+        var errorMessage = error.message;
+        // The email of the user's account used.
+        var email = error.email;
+        // The firebase.auth.AuthCredential type that was used.
+        var credential = error.credential;
+        // ...
+      });
+  };
+  const SignOut = () => {
+    setUserData("");
+  };
+  console.log(userData);
   return (
     <React.Fragment>
       <Toolbar className={classes.toolbar}>
@@ -51,9 +85,25 @@ export default function Header(props) {
         <IconButton>
           <SearchIcon />
         </IconButton>
-        <Button variant="outlined" size="small" className={classes.btnStyle}>
-          Sign up
-        </Button>
+        {!userData.displayName ? (
+          <Button
+            variant="outlined"
+            size="small"
+            className={classes.btnStyle}
+            onClick={signIn}
+          >
+            Sign up
+          </Button>
+        ) : (
+          <Button
+            variant="outlined"
+            size="small"
+            className={classes.btnStyle}
+            onClick={SignOut}
+          >
+            Sign out
+          </Button>
+        )}
       </Toolbar>
     </React.Fragment>
   );
